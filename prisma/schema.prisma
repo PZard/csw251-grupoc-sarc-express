@@ -1,0 +1,220 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Prisma schema for AWS Aurora (MySQL compatible)
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatusRecurso {
+  disponivel
+  em_manutencao
+}
+
+enum Perfil {
+  admin
+  professor
+  aluno
+  coordenador
+}
+
+model Usuario {
+  email           String        @id
+  nome            String
+  dataNascimento  DateTime
+  sexo            String
+  telefones       Telefone[]
+  turmasProfessor Turma[]       @relation("TurmasProfessor")
+  alunoTurmas     AlunoTurma[]  @relation("AlunoTurmas")
+  chamadas        Chamada[]     @relation("ChamadasAluno")
+}
+
+model Telefone {
+  id       Int     @id @default(autoincrement())
+  numero   String
+  descricao String
+  usuario  Usuario @relation(fields: [usuarioEmail], references: [email])
+  usuarioEmail String
+}
+
+model Turma {
+  id         Int         @id @default(autoincrement())
+  disciplina Disciplina  @relation(fields: [disciplinaCod], references: [codDisciplina])
+  disciplinaCod String
+  semestre   String
+  professor  Usuario     @relation("TurmasProfessor", fields: [professorEmail], references: [email])
+  professorEmail String
+  horario    String
+  vagas      Int
+  avaliacoes Avaliacao[]
+  alunos     AlunoTurma[]
+  aulas      Aula[]
+}
+
+model Avaliacao {
+  id       Int      @id @default(autoincrement())
+  data     DateTime
+  enunciado String
+  tipo     String
+  turma    Turma   @relation(fields: [turmaId], references: [id])
+  turmaId  Int
+}
+
+model AlunoTurma {
+  id       Int     @id @default(autoincrement())
+  aluno    Usuario @relation("AlunoTurmas", fields: [alunoEmail], references: [email])
+  alunoEmail String
+  turma    Turma   @relation(fields: [turmaId], references: [id])
+  turmaId  Int
+}
+
+model Aula {
+  id      Int      @id @default(autoincrement())
+  data    DateTime
+  sala    Sala     @relation(fields: [salaId], references: [id])
+  salaId  Int
+  turma   Turma    @relation(fields: [turmaId], references: [id])
+  turmaId Int
+  conteudos Conteudo[]
+  chamadas  Chamada[]
+  reservas  Reserva[]
+}
+
+model Conteudo {
+  id      Int    @id @default(autoincrement())
+  descricao String
+  aula    Aula   @relation(fields: [aulaId], references: [id])
+  aulaId  Int
+}
+
+model Chamada {
+  id       Int     @id @default(autoincrement())
+  aluno    Usuario @relation("ChamadasAluno", fields: [alunoEmail], references: [email])
+  alunoEmail String
+  aula     Aula    @relation(fields: [aulaId], references: [id])
+  aulaId   Int
+  presenca Boolean
+}
+
+model Reserva {
+  id        Int     @id @default(autoincrement())
+  aula      Aula    @relation(fields: [aulaId], references: [id])
+  aulaId    Int
+  recurso   Recurso @relation(fields: [recursoId], references: [idRecurso])
+  recursoId Int
+  observacao String
+}
+
+model Recurso {
+  idRecurso     Int              @id @default(autoincrement())
+  descricao     String
+  status        StatusRecurso
+  caracteristicas Caracteristica[]
+  reservas      Reserva[]
+  tipoRecurso   TipoRecurso?     @relation(fields: [tipoRecursoId], references: [idTipoRecurso])
+  tipoRecursoId Int?
+  salas         SalaRecurso[]
+}
+
+model Caracteristica {
+  id         Int     @id @default(autoincrement())
+  nome       String
+  recurso    Recurso @relation(fields: [recursoId], references: [idRecurso])
+  recursoId  Int
+}
+
+model TipoRecurso {
+  idTipoRecurso Int      @id @default(autoincrement())
+  nome          String
+  recursos      Recurso[]
+}
+
+model Predio {
+  numPredio Int    @id
+  nome      String
+  rua       String
+  numero    String
+  complemento String?
+  bairro    String
+  cidade    String
+  uf        String
+  cep       String
+  salas     Sala[]
+}
+
+model Sala {
+  id        Int         @id @default(autoincrement())
+  numSala   String
+  capacidade Int
+  andar     Int
+  predio    Predio      @relation(fields: [predioNum], references: [numPredio])
+  predioNum Int
+  recursos  SalaRecurso[]
+  aulas     Aula[]
+}
+
+model SalaRecurso {
+  id        Int      @id @default(autoincrement())
+  sala      Sala     @relation(fields: [salaId], references: [id])
+  salaId    Int
+  recurso   Recurso  @relation(fields: [recursoId], references: [idRecurso])
+  recursoId Int
+}
+
+model Disciplina {
+  codDisciplina     String        @id
+  nome              String
+  creditos          Int
+  programa          String
+  itensBibliograficos ItemBibliografico[]
+  turmas            Turma[]
+  curriculos        CurriculoDisciplina[]
+}
+
+model ItemBibliografico {
+  id            Int        @id @default(autoincrement())
+  descricao     String
+  disciplina    Disciplina @relation(fields: [disciplinaCod], references: [codDisciplina])
+  disciplinaCod String
+}
+
+model Curriculo {
+  idCurriculo       Int       @id @default(autoincrement())
+  nomeCurso         String
+  dataInicioVigencia DateTime
+  dataFimVigencia    DateTime
+  disciplinas        CurriculoDisciplina[]
+  requisitos         Requisito[]
+  seriacao           Seriacao[]
+}
+
+model CurriculoDisciplina {
+  id           Int         @id @default(autoincrement())
+  curriculo    Curriculo   @relation(fields: [curriculoId], references: [idCurriculo])
+  curriculoId  Int
+  disciplina   Disciplina  @relation(fields: [disciplinaCod], references: [codDisciplina])
+  disciplinaCod String
+}
+
+model Requisito {
+  id           Int        @id @default(autoincrement())
+  descricao    String
+  curriculo    Curriculo  @relation(fields: [curriculoId], references: [idCurriculo])
+  curriculoId  Int
+}
+
+model Seriacao {
+  id           Int        @id @default(autoincrement())
+  periodo      String
+  curriculo    Curriculo  @relation(fields: [curriculoId], references: [idCurriculo])
+  curriculoId  Int
+}

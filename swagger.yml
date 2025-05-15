@@ -1,0 +1,972 @@
+openapi: 3.0.0
+info:
+  title: SARC API
+  version: 1.0.0
+servers:
+  - url: /api
+
+paths:
+  /usuarios:
+    post:
+      summary: Cria um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+        '400':
+          description: Erro de validação ou e-mail já cadastrado
+    get:
+      summary: Lista todos os usuários
+      responses:
+        '200':
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+  /usuarios/{email}:
+    get:
+      summary: Busca usuário por e-mail
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuário encontrado
+        '404':
+          description: Usuário não encontrado
+    put:
+      summary: Atualiza usuário
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          description: Usuário atualizado
+        '400':
+          description: Erro de validação
+    delete:
+      summary: Remove usuário
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Usuário removido
+        '400':
+          description: Não pode remover usuário vinculado
+
+  /telefones:
+    post:
+      summary: Cria um novo telefone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Telefone'
+      responses:
+        '201':
+          description: Telefone criado
+    get:
+      summary: Lista todos os telefones
+      responses:
+        '200':
+          description: Lista de telefones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Telefone'
+  /telefones/{id}:
+    get:
+      summary: Busca telefone por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Telefone encontrado
+        '404':
+          description: Telefone não encontrado
+    put:
+      summary: Atualiza telefone
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Telefone'
+      responses:
+        '200':
+          description: Telefone atualizado
+    delete:
+      summary: Remove telefone
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Telefone removido
+
+  /turmas:
+    post:
+      summary: Cria uma nova turma
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Turma'
+      responses:
+        '201':
+          description: Turma criada
+        '400':
+          description: Erro de validação
+    get:
+      summary: Lista todas as turmas
+      responses:
+        '200':
+          description: Lista de turmas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Turma'
+  /turmas/{id}:
+    get:
+      summary: Busca turma por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Turma encontrada
+        '404':
+          description: Turma não encontrada
+    put:
+      summary: Atualiza turma
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Turma'
+      responses:
+        '200':
+          description: Turma atualizada
+    delete:
+      summary: Remove turma
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Turma removida
+  /turmas/{id}/atribuir-professor:
+    put:
+      summary: Atribui professor à turma
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                professorEmail:
+                  type: string
+      responses:
+        '200':
+          description: Professor atribuído
+        '400':
+          description: Usuário selecionado não é um professor válido
+
+  /avaliacoes:
+    post:
+      summary: Cria uma nova avaliação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Avaliacao'
+      responses:
+        '201':
+          description: Avaliação criada
+        '400':
+          description: Erro de validação
+    get:
+      summary: Lista todas as avaliações
+      responses:
+        '200':
+          description: Lista de avaliações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Avaliacao'
+  /avaliacoes/{id}:
+    get:
+      summary: Busca avaliação por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Avaliação encontrada
+        '404':
+          description: Avaliação não encontrada
+    put:
+      summary: Atualiza avaliação
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Avaliacao'
+      responses:
+        '200':
+          description: Avaliação atualizada
+    delete:
+      summary: Remove avaliação
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Avaliação removida
+  /avaliacoes/programadas/{alunoEmail}:
+    get:
+      summary: Lista avaliações futuras do aluno, com filtro opcional por disciplina
+      parameters:
+        - in: path
+          name: alunoEmail
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: disciplina
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de avaliações
+
+  /aluno-turmas:
+    post:
+      summary: Cria um novo vínculo aluno-turma
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlunoTurma'
+      responses:
+        '201':
+          description: Vínculo criado
+    get:
+      summary: Lista todos os vínculos aluno-turma
+      responses:
+        '200':
+          description: Lista de vínculos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlunoTurma'
+  /aluno-turmas/{id}:
+    get:
+      summary: Busca vínculo por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vínculo encontrado
+        '404':
+          description: Vínculo não encontrado
+    put:
+      summary: Atualiza vínculo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlunoTurma'
+      responses:
+        '200':
+          description: Vínculo atualizado
+    delete:
+      summary: Remove vínculo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Vínculo removido
+
+  /aulas:
+    post:
+      summary: Cria uma nova aula
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Aula'
+      responses:
+        '201':
+          description: Aula criada
+    get:
+      summary: Lista todas as aulas
+      responses:
+        '200':
+          description: Lista de aulas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Aula'
+  /aulas/{id}:
+    get:
+      summary: Busca aula por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Aula encontrada
+        '404':
+          description: Aula não encontrada
+    put:
+      summary: Atualiza aula
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Aula'
+      responses:
+        '200':
+          description: Aula atualizada
+    delete:
+      summary: Remove aula
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Aula removida
+  /aulas/calendario/{alunoEmail}:
+    get:
+      summary: Lista aulas futuras/atuais do aluno
+      parameters:
+        - in: path
+          name: alunoEmail
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de aulas ou mensagem de nenhuma aula disponível
+
+  /conteudos:
+    post:
+      summary: Cria um novo conteúdo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conteudo'
+      responses:
+        '201':
+          description: Conteúdo criado
+    get:
+      summary: Lista todos os conteúdos
+      responses:
+        '200':
+          description: Lista de conteúdos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conteudo'
+  /conteudos/{id}:
+    get:
+      summary: Busca conteúdo por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Conteúdo encontrado
+        '404':
+          description: Conteúdo não encontrado
+    put:
+      summary: Atualiza conteúdo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conteudo'
+      responses:
+        '200':
+          description: Conteúdo atualizado
+    delete:
+      summary: Remove conteúdo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Conteúdo removido
+
+  /chamadas:
+    post:
+      summary: Registra presença de alunos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Chamada'
+      responses:
+        '201':
+          description: Presenças registradas
+        '400':
+          description: Nenhuma presença marcada
+    get:
+      summary: Lista todas as chamadas
+      responses:
+        '200':
+          description: Lista de chamadas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chamada'
+  /chamadas/{id}:
+    get:
+      summary: Busca chamada por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Chamada encontrada
+        '404':
+          description: Chamada não encontrada
+    put:
+      summary: Atualiza chamada
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Chamada'
+      responses:
+        '200':
+          description: Chamada atualizada
+    delete:
+      summary: Remove chamada
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Chamada removida
+  /chamadas/historico/{alunoEmail}:
+    get:
+      summary: Histórico de presença do aluno
+      parameters:
+        - in: path
+          name: alunoEmail
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de presenças ou mensagem de nenhuma presença registrada
+
+  /reservas:
+    post:
+      summary: Cria uma nova reserva de recurso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+      responses:
+        '201':
+          description: Reserva criada
+        '400':
+          description: Recurso indisponível para reserva
+    get:
+      summary: Lista todas as reservas
+      responses:
+        '200':
+          description: Lista de reservas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+  /reservas/{id}:
+    get:
+      summary: Busca reserva por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reserva encontrada
+        '404':
+          description: Reserva não encontrada
+    put:
+      summary: Atualiza reserva
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+      responses:
+        '200':
+          description: Reserva atualizada
+    delete:
+      summary: Remove reserva
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Reserva removida
+
+  /recursos:
+    post:
+      summary: Cria um novo recurso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recurso'
+      responses:
+        '201':
+          description: Recurso criado
+    get:
+      summary: Lista todos os recursos
+      responses:
+        '200':
+          description: Lista de recursos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recurso'
+  /recursos/{idRecurso}:
+    get:
+      summary: Busca recurso por id
+      parameters:
+        - in: path
+          name: idRecurso
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Recurso encontrado
+        '404':
+          description: Recurso não encontrado
+    put:
+      summary: Atualiza recurso
+      parameters:
+        - in: path
+          name: idRecurso
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recurso'
+      responses:
+        '200':
+          description: Recurso atualizado
+    delete:
+      summary: Remove recurso
+      parameters:
+        - in: path
+          name: idRecurso
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Recurso removido
+
+  /caracteristicas:
+    post:
+      summary: Cria uma nova característica
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Caracteristica'
+      responses:
+        '201':
+          description: Característica criada
+    get:
+      summary: Lista todas as características
+      responses:
+        '200':
+          description: Lista de características
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Caracteristica'
+  /caracteristicas/{id}:
+    get:
+      summary: Busca característica por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Característica encontrada
+        '404':
+          description: Característica não encontrada
+    put:
+      summary: Atualiza característica
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Caracteristica'
+      responses:
+        '200':
+          description: Característica atualizada
+    delete:
+      summary: Remove característica
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Característica removida
+
+  /curriculos:
+    post:
+      summary: Cria um novo currículo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curriculo'
+      responses:
+        '201':
+          description: Currículo criado
+        '400':
+          description: Erro de validação
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        email:
+          type: string
+        nome:
+          type: string
+        dataNascimento:
+          type: string
+          format: date
+        sexo:
+          type: string
+        telefones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Telefone'
+    Telefone:
+      type: object
+      properties:
+        id:
+          type: integer
+        numero:
+          type: string
+        descricao:
+          type: string
+        usuarioEmail:
+          type: string
+    Turma:
+      type: object
+      properties:
+        id:
+          type: integer
+        disciplinaCod:
+          type: string
+        semestre:
+          type: string
+        professorEmail:
+          type: string
+        horario:
+          type: string
+        vagas:
+          type: integer
+    Avaliacao:
+      type: object
+      properties:
+        id:
+          type: integer
+        data:
+          type: string
+          format: date
+        enunciado:
+          type: string
+        tipo:
+          type: string
+        turmaId:
+          type: integer
+    AlunoTurma:
+      type: object
+      properties:
+        id:
+          type: integer
+        alunoEmail:
+          type: string
+        turmaId:
+          type: integer
+    Aula:
+      type: object
+      properties:
+        id:
+          type: integer
+        data:
+          type: string
+          format: date
+        salaId:
+          type: integer
+        turmaId:
+          type: integer
+    Conteudo:
+      type: object
+      properties:
+        id:
+          type: integer
+        descricao:
+          type: string
+        aulaId:
+          type: integer
+    Chamada:
+      type: object
+      properties:
+        id:
+          type: integer
+        alunoEmail:
+          type: string
+        aulaId:
+          type: integer
+        presenca:
+          type: boolean
+    Reserva:
+      type: object
+      properties:
+        id:
+          type: integer
+        aulaId:
+          type: integer
+        recursoId:
+          type: integer
+        observacao:
+          type: string
+    Recurso:
+      type: object
+      properties:
+        idRecurso:
+          type: integer
+        descricao:
+          type: string
+        status:
+          type: string
+        tipoRecursoId:
+          type: integer
+    Caracteristica:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        recursoId:
+          type: integer
+    Curriculo:
+      type: object
+      properties:
+        idCurriculo:
+          type: integer
+        nomeCurso:
+          type: string
+        dataInicioVigencia:
+          type: string
+          format: date
+        dataFimVigencia:
+          type: string
+          format: date

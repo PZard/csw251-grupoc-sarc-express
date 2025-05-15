@@ -1,0 +1,17 @@
+service: sarc
+
+frameworkVersion: "4"
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  profile: sarc
+
+functions:
+  api:
+    handler: src/index.default
+    events:
+      - httpApi: "*"
