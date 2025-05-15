@@ -3,7 +3,7 @@ info:
   title: SARC API
   version: 1.0.0
 servers:
-  - url: /api
+  - url: https://wsc7kc904m.execute-api.us-east-1.amazonaws.com/api
 
 paths:
   /usuarios:
