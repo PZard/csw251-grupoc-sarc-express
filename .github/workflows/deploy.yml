@@ -51,6 +51,9 @@ jobs:
       - name: Build project
         run: npx esbuild src/index.js --bundle --minify --sourcemap --platform=node --target=node20 --outdir=dist
 
+      - name: Configure Serverless Framework license key
+        run: echo "${{ secrets.SERVERLESS_LICENSE_KEY }}" > ~/.serverlessrc
+
       - name: Login to Serverless Framework
         run: serverless login --org pucsarc --app sarc --debug
 
