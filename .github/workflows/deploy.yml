@@ -52,7 +52,7 @@ jobs:
         run: npx esbuild src/index.js --bundle --minify --sourcemap --platform=node --target=node20 --outdir=dist
 
       - name: Login to Serverless Framework
-        run: serverless login --org pucsarc --app sarc
+        run: serverless login --org pucsarc --app sarc --debug
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
