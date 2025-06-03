@@ -52,12 +52,7 @@ jobs:
         run: npm ci --omit=dev
 
       - name: Prisma generate
-        run: |
-          npx prisma generate
-          npx prisma migrate deploy
-
-      #- name: Build project
-      #  run: npx esbuild src/index.js --bundle --minify --sourcemap --platform=node --target=node20 --outdir=dist
+        run: npx prisma generate
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4.2.1
