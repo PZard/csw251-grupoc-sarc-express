@@ -45,21 +45,6 @@ jobs:
       - name: Create .env file
         run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
 
-      - name: Dump .env (debug)
-        run: |
-          echo "--- .env contents ---"
-          cat .env || echo "no .env"
-          echo "---------------------"
-
-      - name: Install netcat
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y netcat-openbsd
-
-      - name: Check TCP connectivity to RDS
-        run:
-          nc -zv sarc.cibuygi8ouvp.us-east-1.rds.amazonaws.com 3306
-
       - name: Install Serverless Framework
         run: npm install -g serverless
 
