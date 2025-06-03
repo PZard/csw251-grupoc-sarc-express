@@ -48,9 +48,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
-        run: npx esbuild src/index.js --bundle --minify --sourcemap --platform=node --target=node20 --outdir=dist
-      
+      #- name: Build project
+      #  run: npx esbuild src/index.js --bundle --minify --sourcemap --platform=node --target=node20 --outdir=dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Serverless deploy
         uses: serverless/github-action@v4.0.0
         with:
