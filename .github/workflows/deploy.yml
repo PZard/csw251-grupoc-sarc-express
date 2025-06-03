@@ -45,6 +45,12 @@ jobs:
       - name: Create .env file
         run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
 
+      - name: Dump .env (debug)
+        run: |
+          echo "--- .env contents ---"
+          cat .env || echo "no .env"
+          echo "---------------------"
+
       - name: Install Serverless Framework
         run: npm install -g serverless
 
