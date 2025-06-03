@@ -51,6 +51,13 @@ jobs:
           cat .env || echo "no .env"
           echo "---------------------"
 
+      - name: Install netcat
+        run: sudo apt-get update && sudo apt-get install -y netcat
+
+      - name: Check TCP connectivity to RDS
+        run:
+          nc -zv sarc.cibuygi8ouvp.us-east-1.rds.amazonaws.com 3306
+
       - name: Install Serverless Framework
         run: npm install -g serverless
 
