@@ -1,5 +1,6 @@
 import express from 'express';
 import UsuarioController from '../controllers/UsuarioController.js';
+import DisciplinaController from '../controllers/DisciplinaController.js';
 import TelefoneController from '../controllers/TelefoneController.js';
 import TurmaController from '../controllers/TurmaController.js';
 import AvaliacaoController from '../controllers/AvaliacaoController.js';
@@ -19,6 +20,12 @@ router.get('/usuarios', (req, res) => UsuarioController.getAll(req, res));
 router.get('/usuarios/:email', (req, res) => UsuarioController.getById(req, res));
 router.put('/usuarios/:email', (req, res) => UsuarioController.update(req, res));
 router.delete('/usuarios/:email', (req, res) => UsuarioController.delete(req, res));
+
+router.post('/disciplinas', (req, res) => DisciplinaController.create(req, res));
+router.get('/disciplinas', (req, res) => DisciplinaController.getAll(req, res));
+router.get('/disciplinas/:codDisciplina', (req, res) => DisciplinaController.getById(req, res));
+router.put('/disciplinas/:codDisciplina', (req, res) => DisciplinaController.update(req, res));
+router.delete('/disciplinas/:codDisciplina', (req, res) => DisciplinaController.delete(req, res));
 
 router.post('/telefones', (req, res) => TelefoneController.create(req, res));
 router.get('/telefones', (req, res) => TelefoneController.getAll(req, res));

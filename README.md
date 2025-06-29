@@ -14,6 +14,72 @@
 - **AWS RDS** (banco de dados compatível com MySQL)
 - **Serverless Framework** (deploy para AWS Lambda & API Gateway)
 - **Swagger** (documentação da API)
+- **Commander** (CLI)
+- **Axios** (requisições HTTP)
+- **Docker** (opcional para banco)
+
+---
+
+# CLI - Frontend do SARC
+
+Esta aplicação expõe as principais funcionalidades do SARC via uma interface de linha de comando (CLI), consumindo diretamente as REST APIs do projeto.
+
+## Como executar o frontend (CLI)
+
+1. Instale as dependências:
+   ```bash
+   npm install
+   ```
+2. Suba o banco de dados (opcional, se usar Docker):
+   ```bash
+   docker-compose up -d db
+   ```
+3. Configure o arquivo `.env` com a string de conexão do banco.
+4. Rode a API:
+   ```bash
+   npx serverless offline
+   ```
+5. Execute comandos da CLI:
+   ```bash
+   node cli.js usuarios listar
+   node cli.js disciplinas criar -c "CSW251" -n "Construção de Software" -r 4 -p "Programação orientada a objetos"
+   ```
+
+## Principais funcionalidades disponíveis
+- Cadastro, consulta, atualização e remoção de usuários, disciplinas, turmas, aulas, chamadas, avaliações, recursos, reservas e currículos.
+- Comandos especiais: calendário de aulas, histórico de chamadas, avaliações programadas, etc.
+
+## Exemplos de uso
+```bash
+# Criar um usuário
+node cli.js usuarios criar -n "João" -e "joao@exemplo.com" -d "2000-01-01" --sexo M
+
+# Listar usuários
+node cli.js usuarios listar
+
+# Criar disciplina
+node cli.js disciplinas criar -c "CSW251" -n "Construção de Software" -r 4 -p "Programação orientada a objetos"
+
+# Criar turma
+node cli.js turmas criar -d "CSW251" -s "2024.1" -p "joao@exemplo.com" -h "14:30" -v 30
+
+# Buscar disciplina
+node cli.js disciplinas buscar -c "CSW251"
+
+# Deletar disciplina
+node cli.js disciplinas deletar -c "CSW251"
+```
+
+## Tecnologias utilizadas no frontend (CLI)
+- Node.js
+- Commander
+- Axios
+
+## Observações
+- O frontend CLI consome diretamente as REST APIs do SARC.
+- Para rodar a API, é necessário ter o banco de dados configurado e o arquivo `.env` preenchido.
+
+---
 
 ## Configuração para Desenvolvimento
 
